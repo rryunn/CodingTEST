@@ -1,48 +1,42 @@
-#2178 미로탐색 문제랑 거의 유사
+
 from collections import deque
+n = int(input())
 
-def bfs(graph,x,y):
-    N= len(graph)
-    dx = [0, 0, 1, -1]
-    dy = [1, -1, 0, 0]
-
+lst = [list(map(int,input())) for _ in range(n)]   
+def bfs( start_x, start_y):
+    count = 1
     queue = deque()
-    queue.append((x,y))
-    graph[x][y]=0
-    count =1
-    
+    queue.append([start_x,start_y])
+    lst[start_x][start_y] = 0
+    dx = [-1,1,0,0]
+    dy = [0,0, -1,1]
+
     while queue:
         x,y = queue.popleft()
+        
+        for d in range(4):
+            nx = x + dx[d]
+            ny = y + dy[d]
 
-        for i in range(4):
-                nx = x + dx[i]
-                ny = y + dy[i]
-
-                if nx<0 or nx>=N or ny<0 or ny>=N:
-                    continue
-                    
-                if graph[nx][ny]==0:
-                    continue
-
-                if graph[nx][ny]==1:
-                    graph[nx][ny] = 0
-                    queue.append((nx,ny))
-                    count += 1
-    return count
-
-N = int(input())
-graph = []
-counts =[] #단지 개수들을 담을 list
-for i in range(N):
-    graph.append(list(map(int,input())))
-    
-for i in range(N):
-    for j in range(N):
-        if graph[i][j]==1:
-            counts.append(bfs(graph,i,j))
+            if (0<= nx < n) and (0<= ny < n) and lst[nx][ny] == 1:
+                lst[nx][ny] = 0
+                queue.append((nx,ny))
             
-counts.sort()
-print(len(counts))
-for count in counts:
-    print(count)
+                count += 1
+            
+    return count
+        
+
+
+cnt = []
+
+for i in range(n):
+    for j in range(n):
+        if lst[i][j] ==1:
+            cnt.append(bfs(i,j))
+            
+cnt.sort()
+print(len(cnt))
+for coun in cnt:
+    print(coun)
     
