@@ -1,37 +1,29 @@
 from collections import deque
+import sys
+input = sys.stdin.readline
 
-N, M = map(int, input().split())
-
-graph = []
-
-for _ in range(N):
-    graph.append(list(map(int, input())))
-
-def BFS(x, y):
-
-    dx = [-1,1,0,0]
-    dy = [0,0,-1,1]
-
-    queue = deque()
-    queue.append((x,y))
+def bfs():
+    queue = deque([(0, 0, 1)])
+    visited[0][0] = 1
 
     while queue:
-        x, y = queue.popleft()
-
+        y, x, dist = queue.popleft()
+        if y == N-1 and x == M-1:
+            return dist
         for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
+            ni = y + di[i]
+            nj = x + dj[i]
+            if 0 <= ni < N and 0 <= nj < M:
+                if not visited[ni][nj] and arr[ni][nj] == 1:
+                    visited[ni][nj] = 1
+                    queue.append((ni, nj, dist+1))
+    return 0
 
-            if nx<0 or nx>=N or ny<0 or ny>=M:
-                continue
+N, M = map(int, input().split())
+arr = [list(map(int, input().strip())) for _ in range(N)]
+visited = [[0]*M for _ in range(N)]
 
-            if graph[nx][ny]==0:
-                continue
+di = (0, 1, 0, -1)
+dj = (1, 0, -1, 0)
 
-            if graph[nx][ny]==1:
-                graph[nx][ny] = graph[x][y]+1
-                queue.append((nx,ny))
-
-    return graph[N-1][M-1]
-
-print(BFS(0,0))
+print(bfs())
