@@ -1,50 +1,42 @@
 import java.util.*;
 
 class Solution {
-    boolean check(String begin, String word) {
-        if (begin.length() != word.length()) {
-            return false;
+    class Word{
+        String word; 
+        int count;
+        Word(String word, int count){
+            this.word = word;
+            this.count = count;
         }
-        int diff = 0;
-        for (int i = 0; i < word.length(); i++) {
-            if (begin.charAt(i) != word.charAt(i)) {
-                diff++;
-            }
-        }
-        return diff == 1;
     }
-
-    public int solution(String begin, String target, String[] words) {
-        if (!Arrays.asList(words).contains(target)) {
-            return 0;  // target이 words에 없다면 바로 0 반환
+    int GetDiff(String word1, String word2){
+        int count=0;
+        for(int i =0; i<word1.length(); i++){
+            if(word1.charAt(i)!=word2.charAt(i)) count++;
         }
-
-        Queue<String> queue = new LinkedList<>();
-        boolean[] visited = new boolean[words.length];
-        int count = 0;
-
-        queue.offer(begin);
-
-        while (!queue.isEmpty()) {
-            int size = queue.size();  // 현재 레벨의 크기
-            for (int i = 0; i < size; i++) {
-                String current = queue.poll();
-
-                if (current.equals(target)) {
-                    return count;  // target을 찾으면 바로 리턴
-                }
-
-                for (int j = 0; j < words.length; j++) {
-                    // 아직 방문하지 않았고, 단어 하나만 다르면
-                    if (!visited[j] && check(current, words[j])) {
-                        queue.offer(words[j]);
-                        visited[j] = true;  // 방문 표시
+        return count;
+    }
+    public int solution(String begin, String target, String[] words) {
+        Queue<Word> queue = new ArrayDeque<>();
+        Set<String> visited = new HashSet<>();
+        
+        queue.offer(new Word (begin, 0));
+        visited.add(begin);
+        
+        while(!queue.isEmpty()){
+            
+            Word cur = queue.poll();
+            
+            if(cur.word.equals(target)) return cur.count;
+            for(String next: words){
+                if(GetDiff(cur.word, next)==1){
+                    if(!visited.contains(next)){
+                        queue.offer(new Word(next,cur.count+1));   
+                        visited.add(next);
                     }
                 }
             }
-            count++;  // 한 레벨이 끝날 때마다 증가
         }
-
-        return 0;  // target을 못 찾은 경우 0 반환
+        return 0;
     }
 }
