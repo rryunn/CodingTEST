@@ -2,9 +2,9 @@ import java.util.*;
 class Solution {
     Set<Integer> primeSet;
     public int solution(String numbers) {
-        int answer=0;
+        int answer =0;
         primeSet = new HashSet<>();
-        boolean[] visited = new boolean[numbers.length()];
+        boolean[] visited = new boolean[numbers.length()]; 
         dfs(numbers,visited,"");
         return primeSet.size();
     }
@@ -22,11 +22,9 @@ class Solution {
         }
     }
     boolean isPrime(int num){
-        if(num<2){
-            return false;
-        }
-        for(int i=2;i*i<=num;i++){
-            if(num%i==0)return false;
+        if(num<2) return false;
+        for(int i=2;i<num;i++){
+            if(num%i==0) return false;
         }
         return true;
     }
