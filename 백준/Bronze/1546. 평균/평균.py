@@ -1,11 +1,7 @@
 n = int(input())
-arr = list(map(int,input().split()))
-    
-sum = 0
-max = max(arr)
+scores = list(map(int,input().split()))
+m = max(scores)
+for i in range(n):
+    scores[i] = scores[i]/m*100
 
-for i in arr:
-    i = i*100/max
-    sum = sum + i
-
-print(sum/len(arr))
+print(sum(scores)/n)
