@@ -1,7 +1,9 @@
-A, B, V = map(int, input().split())
+a,b,v = map(int,input().split())
 
-x = (V-B)/(A-B)
-if x == int(x):
-    print(int(x))
+day = (v-a)//(a-b) +1
+if (v-a)%(a-b)!=0:
+    day+=1
+    print(day)
 else:
-    print(int(x) + 1)
+    print(day)
+
