@@ -1,20 +1,20 @@
-N = int(input())
-V = int(input())
-
-graph = [[] for _ in range(N + 1)]
-for _ in range(V):
-    line1, line2 = map(int,input().split())
-    graph[line1].append(line2)
-    graph[line2].append(line1)
+def dfs(node):
+    visited[node] = 1
+    for neighbor in graph[node]:
+        if visited[neighbor] == 0:
+            dfs(neighbor)
     
-def dfs(start):
-    global count
-    visited[start] = True
-    count +=1
-    for i in graph[start]:
-            if not visited[i]:
-                dfs(i)
+V = int(input())
+E = int(input())
+visited = [0]*(V+1)
+graph = [[] for _ in range(V+1)]
 count = 0
-visited = [False for _ in range(N+1)]
+for  _ in range(E):
+    u,v = map(int,input().split())
+    graph[u].append(v)
+    graph[v].append(u)
+    
 dfs(1)
-print(count-1)
+print(sum(visited)-1)
+    
+    
