@@ -1,15 +1,12 @@
 n = int(input())
-stair = [0]*301
-for i in range(n):
-    stair[i]=int(input())
-dp = [0] * 301
+stairs = [0]
+for _ in range(n):
+    stairs.append(int(input()))
 
-dp[0] = stair[0]
-dp[1] = stair[0]+ stair[1]
-dp[2] = max(stair[0]+stair[2], stair[1]+stair[2])
-
-#dp[4] = 계단 1+2+4 혹은 계단 1+3+4  
-for i in range(3, n):
-    dp[i] = max(dp[i-2]+stair[i], dp[i-3]+stair[i-1]+stair[i])
-    
-print(dp[n-1])
+dp = [0]*(n+1)
+dp[1] = stairs[1]
+if n>=2:
+    dp[2] = stairs[1]+stairs[2]
+for i in range(3,n+1):
+    dp[i] = max(dp[i-2]+stairs[i], dp[i-3]+stairs[i-1]+stairs[i])
+print(dp[n])
