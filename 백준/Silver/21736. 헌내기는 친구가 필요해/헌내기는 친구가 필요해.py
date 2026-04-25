@@ -1,38 +1,35 @@
 from collections import deque
+n,m = map(int,input().split())
+arr = []
+for i in range(n):
+    arr.append(list(input()))
 
-dx = [0, 0, 1, -1]
-dy = [1, -1, 0, 0]
-campus = [] 
-x, y = 0, 0 
-count = 0 
+q = deque()
+v = set()
 
-N, M = map(int, input().split())
+for i in range(n):
+    for j in range(m):
+        if arr[i][j] =='I':
+            q.append((i,j))
+            v.add((i,j))
 
-for i in range(N):
-    campus.append(list(input()))
-    
-    for j in range(M):
-        if campus[i][j] == 'I': 
-            x= i
-            y = j
+count=0
+while q:
+    ci,cj = q.popleft()
+    for di,dj in ((-1,0),(1,0),(0,1),(0,-1)):
+        ni = di+ci
+        nj = dj+cj
 
-visited = [[0] * M for _ in range(N)] 
+        if 0<=ni<n and 0<=nj<m and (ni,nj) not in v and arr[ni][nj]!='X':
+            if arr[ni][nj] =='P':
+                count+=1
+                q.append((ni,nj))
+                v.add((ni,nj))
+            else:
+                q.append((ni,nj))
+                v.add((ni,nj))
 
-queue = deque()
-queue.append([x, y])
-
-while queue: 
-    x, y = queue.popleft()
-    for i in range(4):  # 상하좌우 탐색
-        nx, ny = x + dx[i], y + dy[i]
-        
-        if 0 <= nx < N and 0 <= ny < M and visited[nx][ny] == 0: # 방문 안했으면 
-            visited[nx][ny] = 1
-            if campus[nx][ny] == 'O':  
-                queue.append([nx, ny])
-                
-            elif campus[nx][ny] == 'P': 
-                queue.append([nx, ny])
-                count += 1 
-
-print('TT' if count == 0 else count) 
+if count ==0:
+    print('TT')
+else:
+    print(count)
