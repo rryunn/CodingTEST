@@ -1,20 +1,18 @@
-import sys
 
 T = int(input())
 
 for _ in range(T):
-    cloth = {}
-    result = 1
     n = int(input())
+    d = {}
     for _ in range(n):
-        name, type = sys.stdin.readline().rstrip().split()
-
-        if not type in cloth:
-            cloth[type] = 1
+        clothes, kind= input().split()
+        if kind in d:
+            d[kind].append(clothes)
         else:
-            cloth[type] += 1
+            d[kind] = [clothes]
 
-    for i in cloth:
-        result *= (cloth[i] + 1)
-
-    print(result - 1)
+    # [1,2] [1]
+    count=1
+    for x in d:
+        count*=(len(d[x])+1)
+    print(count-1)
