@@ -1,38 +1,39 @@
 import java.util.*;
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-
-        int n = progresses.length;
-        int[] left = new int[n];
-        int[] days = new int[n];
         
-        for(int i=0;i<n;i++){
-            left[i] = 100-progresses[i];
-            if(left[i]%speeds[i]!=0)
-                days[i] = left[i]/speeds[i]+1;
+        ArrayList<Integer> list = new ArrayList<>();
+        Deque<Integer> queue = new ArrayDeque<>();
+        
+        for(int i=0;i<progresses.length;i++){
+            int check = (100-progresses[i])%speeds[i];
+            if(check !=0)
+                queue.add((100-progresses[i])/speeds[i] +1);
             else
-                days[i] = left[i]/speeds[i];
+                queue.add((100-progresses[i])/speeds[i]);
         }
         
-        List<Integer> answer = new ArrayList<>();
-        int prevDay = days[0];
+        // [7,70,45]  -> [7,3,9]
         int count =1;
-        for(int i=1;i<days.length;i++){
-            if(days[i]<=prevDay){
+        int standard = queue.poll(); // 7 [3,9]
+        while(!queue.isEmpty()){ 
+            if(standard >= queue.peek()){
                 count++;
+            
+                int trash = queue.poll(); // 패스하고 뒤의 값도 같이 할 수 있는지 봐야하니까
             }else{
-                answer.add(count);
-                count=1;
-                prevDay = days[i];
-            }
+                list.add(count);
+                count =1;
+                standard = queue.poll();
+            }            
         }
-        answer.add(count);
+        list.add(count);
         
-        int[] result = new int[answer.size()];
-        for(int i=0;i<answer.size();i++){
-            result[i] = answer.get(i);
+        int[] answer = new int[list.size()];
+        for(int i=0;i<answer.length;i++){
+            answer[i] = list.get(i);
         }
-        return result;
+        return answer;
         
     }
 }
