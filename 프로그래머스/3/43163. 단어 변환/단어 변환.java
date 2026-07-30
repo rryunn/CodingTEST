@@ -1,39 +1,45 @@
 import java.util.*;
 class Solution {
-    class Word{
-        String word;
-        int count;
-        Word(String word, int count){
-            this.word = word;
-            this.count = count;
-        }
-    }
-    int GetDiff(String word1, String word2){
-        int count =0;
-        for(int i =0; i<word1.length(); i++){
-            if(word1.charAt(i)!= word2.charAt(i)) count++;
-        }
-        return count;
-    }
     public int solution(String begin, String target, String[] words) {
-        Queue<Word> queue= new ArrayDeque<>();
-        Set<String> visited = new HashSet<>();
+        //s.charAt(index)
+        //차이가 하나인지 보기
+        Deque<Node> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[words.length];
         
-        queue.offer(new Word(begin,0));
-        visited.add(begin);
-        
+        // begin 을 queue 에 넣고
+        queue.offer(new Node(begin,0));
+
         while(!queue.isEmpty()){
-            Word cur = queue.poll();
-            if(cur.word.equals(target)) return cur.count;
-            for(String next : words){
-                if(!visited.contains(next)){
-                    if(GetDiff(cur.word, next)==1){
-                        visited.add(next);
-                        queue.offer(new Word(next,cur.count+1));
+            Node cur = queue.poll(); 
+            String s = cur.word;
+            int dist = cur.dist;
+            if(s.equals(target)) return dist;
+            
+            for(int i=0;i<words.length;i++){
+                
+                int diff =0;
+                if(!visited[i]){
+                    for(int j=0;j<s.length();j++){
+                        if(s.charAt(j)!=words[i].charAt(j)) diff++;
+                    }
+
+                    if (diff==1){
+                        queue.offer(new Node(words[i], dist+1));
+                        visited[i] = true;
                     }
                 }
+
             }
         }
-        return 0;
+        return 0;       
+    }
+    class Node{
+        String word;
+        int dist;
+        
+        Node(String word, int dist){
+            this.word = word;
+            this.dist = dist;
+        }
     }
 }
