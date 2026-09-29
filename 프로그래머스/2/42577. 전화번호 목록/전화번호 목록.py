@@ -1,7 +1,13 @@
 def solution(phone_book):
-    phone_book.sort()
+
+    d = {}
+    for p in phone_book:
+        d[p] = 1
     
-    for i in range(len(phone_book)-1):
-        if phone_book[i+1].startswith(phone_book[i]):
-            return False
+    for p in phone_book:
+        temp=""
+        for c in p:
+            temp+=c
+            if temp in d and temp!=p:
+                return False
     return True
