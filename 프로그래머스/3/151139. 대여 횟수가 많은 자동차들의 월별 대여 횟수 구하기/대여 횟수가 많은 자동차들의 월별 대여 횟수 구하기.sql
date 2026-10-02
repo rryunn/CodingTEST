@@ -1,0 +1,20 @@
+SELECT 
+    MONTH(START_DATE) AS MONTH, 
+    CAR_ID, 
+    COUNT(*) AS RECORDS
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+WHERE 
+    -- 1. 메인 쿼리에서도 2022년 8월~10월 대여 건만 필터링
+    START_DATE >= '2022-08-01' AND START_DATE < '2022-11-01'
+    -- 2. 해당 기간 동안 총 대여 횟수가 5회 이상인 CAR_ID만 추출
+    AND CAR_ID IN (
+        SELECT CAR_ID
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+        WHERE START_DATE >= '2022-08-01' AND START_DATE < '2022-11-01'
+        GROUP BY CAR_ID
+        HAVING COUNT(*) >= 5
+    )
+-- 3. 월별, CAR_ID별 그룹화
+GROUP BY MONTH(START_DATE), CAR_ID
+-- 4. 월 오름차순, CAR_ID 내림차순 정렬
+ORDER BY MONTH ASC, CAR_ID DESC;
