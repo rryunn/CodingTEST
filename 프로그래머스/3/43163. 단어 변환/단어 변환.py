@@ -1,27 +1,25 @@
 from collections import deque
-
 def solution(begin, target, words):
+    
+    q = deque()
+    visited = set([begin])
+    q.append((begin, 0))
+    
     if target not in words:
         return 0
     
-    q = deque()
-    q.append((begin, 0))
-    
-    visited=set([begin])
-    
     while q:
-        word, cnt = q.popleft()
+        word, count = q.popleft()
         
         if word == target:
-            return cnt
+            return count
         
         for w in words:
-            #words중에서 word랑 1글자만 다른거 찾을거예요
-            
-            if w not in visited:
-                diff =   sum(1 for a,b in zip(word,w) if a!=b)
-                if diff==1:
-                    visited.add(w)
-                    q.append((w,cnt+1))
-                    
-    return 0
+            diff=0
+            for a,b in zip(w, word):
+                if a!=b:
+                    diff+=1
+            if diff==1:
+                q.append((w,count+1))
+                visited.add(w)
+    
