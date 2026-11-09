@@ -1,45 +1,42 @@
 import java.util.*;
+
 class Solution {
     public int solution(String begin, String target, String[] words) {
-        //s.charAt(index)
-        //차이가 하나인지 보기
-        Deque<Node> queue = new ArrayDeque<>();
+        Queue<WordState> queue = new ArrayDeque<>();
         boolean[] visited = new boolean[words.length];
         
-        // begin 을 queue 에 넣고
-        queue.offer(new Node(begin,0));
-
-        while(!queue.isEmpty()){
-            Node cur = queue.poll(); 
-            String s = cur.word;
-            int dist = cur.dist;
-            if(s.equals(target)) return dist;
+        queue.add(new WordState(0,begin));
+        
+        while (!queue.isEmpty()){
+            WordState cur = queue.remove();
+            if(cur.word.equals(target)) return cur.cnt;
             
-            for(int i=0;i<words.length;i++){
-                
-                int diff =0;
-                if(!visited[i]){
-                    for(int j=0;j<s.length();j++){
-                        if(s.charAt(j)!=words[i].charAt(j)) diff++;
-                    }
-
-                    if (diff==1){
-                        queue.offer(new Node(words[i], dist+1));
-                        visited[i] = true;
-                    }
+            for(int i=0; i<words.length;i++){
+                if(!visited[i] && getDiffCount(cur.word, words[i])==1){
+                    visited[i] = true;
+                    queue.add(new WordState(cur.cnt+1, words[i]));
                 }
-
             }
         }
-        return 0;       
+        return 0;
+    
     }
-    class Node{
+    
+    int getDiffCount(String word, String target){
+        int diff=0;
+        for(int i =0;i<word.length();i++){
+            if(word.charAt(i)!=target.charAt(i)) diff++;
+        }
+        return diff;
+    }
+    
+    class WordState{
+        int cnt;
         String word;
-        int dist;
         
-        Node(String word, int dist){
+        WordState(int cnt, String word){
+            this.cnt = cnt;
             this.word = word;
-            this.dist = dist;
         }
     }
 }
