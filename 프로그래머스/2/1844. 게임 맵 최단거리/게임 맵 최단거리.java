@@ -3,35 +3,32 @@ class Solution {
     public int solution(int[][] maps) {
         int n = maps.length;
         int m = maps[0].length;
+        boolean[][] visited= new boolean[n][m];
         
-        Deque<int[]> queue = new ArrayDeque<>();
-        boolean[][] visited = new boolean[n][m];
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[] {0,0,1});
         
-        queue.offer(new int[] {0,0,1}); //시작점, 거리
-        visited[0][0] = true;
-        
-        int[] dx = {-1,0,1,0};
-        int[] dy = {0,1,0,-1};
+        int[] dx = {0,1,0,-1};
+        int[] dy = {1,0,-1,0};
         
         while(!queue.isEmpty()){
-            int[] cur = queue.poll();
-            int x = cur[0];
-            int y = cur[1];
-            int dist = cur[2];
+            int[] cur = queue.remove();
+            int sx= cur[0], sy =cur[1], dist = cur[2];
+            visited[sx][sy]=true;
             
-            
-            if(x==n-1 && y == m-1) return dist;
-            for(int i=0;i<4;i++){
-                int nx = dx[i] + x;
-                int ny = dy[i] + y;
-                
-                if(nx>=n || nx <0 || ny>=m || ny<0) continue;
-                
-                if(maps[nx][ny]==0 || visited[nx][ny]) continue;
-                
-                queue.offer(new int[] {nx,ny, dist+1});
-                visited[nx][ny]= true;
+            if (sx==n-1 && sy==m-1){
+                return dist;
             }
+            for (int i=0;i<4;i++){
+                int nx = dx[i]+sx;
+                int ny = dy[i]+sy;
+                
+                if (0<=nx && nx<n && ny>=0 && ny<m && !visited[nx][ny]&& maps[nx][ny]==1){
+                    visited[nx][ny]=true;
+                    queue.add(new int[] {nx,ny,dist+1});
+                }
+            }
+            
         }
         return -1;
     }
